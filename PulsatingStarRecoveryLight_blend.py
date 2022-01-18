@@ -237,8 +237,8 @@ class PulsatingStarRecoveryLight(maf.BaseMetric):
                 'uniformityKS_u':uni_meas['uniformityKS_u'],'uniformityKS_g':uni_meas['uniformityKS_g'],'uniformityKS_r':uni_meas['uniformityKS_r'],
                 'uniformityKS_i':uni_meas['uniformityKS_i'],'uniformityKS_z':uni_meas['uniformityKS_z'],'uniformityKS_y':uni_meas['uniformityKS_y'],
 #                'P_gatpsy':best_per_temp,'Delta_Period':diffper,'Delta_Period_abs':diffper_abs,'Delta_Period_abs_cicli':diffcicli,
-                       'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
-                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,'deltaamp_z':deltaamp_z,
+                       'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
+                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
                 'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y']}  
 
         return output_metric
@@ -1153,12 +1153,7 @@ class PulsatingStarRecoveryLight(maf.BaseMetric):
 
 
 
-        ampl_u=max(magModelFromFit_u)-min(magModelFromFit_u)
-        ampl_g=max(magModelFromFit_g)-min(magModelFromFit_g)
-        ampl_r=max(magModelFromFit_r)-min(magModelFromFit_r)
-        ampl_i=max(magModelFromFit_i)-min(magModelFromFit_i)
-        ampl_z=max(magModelFromFit_z)-min(magModelFromFit_z)
-        ampl_y=max(magModelFromFit_y)-min(magModelFromFit_y)
+   
 
 
 
