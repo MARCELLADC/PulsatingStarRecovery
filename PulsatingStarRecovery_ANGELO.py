@@ -548,7 +548,7 @@ class PulsatingStarRecovery(maf.BaseMetric):
         for i in range(len(g_mod_blend)):
             g_model_blend.append(g_mod_blend[i]+dmod+1.18379*3.1*ebv)
         for i in range(len(r_mod_blend)):
-            r_model_blend.append(r_mod_blend[i]+dmod+1.87075*3.1*ebv)
+            r_model_blend.append(r_mod_blend[i]+dmod+0.87075*3.1*ebv)
         for i in range(len(i_mod_blend)):
             i_model_blend.append(i_mod_blend[i]+dmod+0.67897*3.1*ebv)
         for i in range(len(z_mod_blend)):
