@@ -2001,8 +2001,10 @@ class PulsatingStarRecovery(maf.BaseMetric):
     def outputforplot(self,uni_meas,best_per_temp,
                     diffper,diffper_abs,diffcicli,deltamag_u,deltamag_g,deltamag_r,deltamag_i,deltamag_z,
                     deltamag_y,deltaamp_u,deltaamp_g,deltaamp_r,deltaamp_i,deltaamp_z,deltaamp_y,finalResult,data,index_notsaturated,lcModel_noblend,LcTeoLSST):
-        output_metric={'n_u':uni_meas['n_u'],'n_g':uni_meas['n_g'],'n_r':uni_meas['n_r'],'n_i':uni_meas['n_i'],'n_z':uni_meas['n_z'],'n_y':uni_meas['n_y'],
-                'maxGap_u':uni_meas['maxGap_u'],'maxGap_g':uni_meas['maxGap_g'],'maxGap_r':uni_meas['maxGap_r'],'maxGap_i':uni_meas['maxGap_i'],'maxGap_z':uni_meas['maxGap_z'],'maxGap_y':uni_meas['maxGap_y'],
+        output_metric={'n_u':uni_meas['n_u'],'n_g':uni_meas['n_g'],'n_r':uni_meas['n_r'],
+                'n_i':uni_meas['n_i'],'n_z':uni_meas['n_z'],'n_y':uni_meas['n_y'],
+                'maxGap_u':uni_meas['maxGap_u'],'maxGap_g':uni_meas['maxGap_g'],'maxGap_r':uni_meas['maxGap_r'],
+                'maxGap_i':uni_meas['maxGap_i'],'maxGap_z':uni_meas['maxGap_z'],'maxGap_y':uni_meas['maxGap_y'],
                 'numberGaps_u':uni_meas['numberGaps_u'],'numberGaps_g':uni_meas['numberGaps_g'],'numberGaps_r':uni_meas['numberGaps_r'],
                 'numberGaps_i':uni_meas['numberGaps_i'],'numberGaps_z':uni_meas['numberGaps_z'],'numberGaps_y':uni_meas['numberGaps_y'],
                 'uniformity_u':uni_meas['uniformity_u'],'uniformity_g':uni_meas['uniformity_g'],'uniformity_r':uni_meas['uniformity_r'],
@@ -2010,9 +2012,24 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'uniformityKS_u':uni_meas['uniformityKS_u'],'uniformityKS_g':uni_meas['uniformityKS_g'],'uniformityKS_r':uni_meas['uniformityKS_r'],
                 'uniformityKS_i':uni_meas['uniformityKS_i'],'uniformityKS_z':uni_meas['uniformityKS_z'],'uniformityKS_y':uni_meas['uniformityKS_y'],
                 'P_gatpsy':best_per_temp,'Delta_Period':diffper,'Delta_Period_abs':diffper_abs,'Delta_Period_abs_cicli':diffcicli,
-                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
-                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
-                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y'],'fittingParametersAllband':finalResult['fittingParametersAllband'],'data':data,'index_notsaturated':index_notsaturated,'meanu_model':lcModel_noblend['meanu'],'meang_model':lcModel_noblend['meang'],'meanr_model':lcModel_noblend['meanr'],'meani_model':lcModel_noblend['meani'],'meanz_model':lcModel_noblend['meanz'],'meany_model':lcModel_noblend['meany'],'detlimLSSTu':LcTeoLSST['meandetlimLSSTu'],'detlimLSSTg':LcTeoLSST['meandetlimLSSTg'],'detlimLSSTr':LcTeoLSST['meandetlimLSSTr'],'detlimLSSTi':LcTeoLSST['meandetlimLSSTi'],'detlimLSSTz':LcTeoLSST['meandetlimLSSTz'],'detlimLSSTy':LcTeoLSST['meandetlimLSSTy']}
+                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,
+                'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
+                'deltaamp_u':deltaamp_u,'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,
+                'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
+                'amplu_model':lcModel_noblend['amplu'],'amplg_model':lcModel_noblend['amplg'],'amplr_model':lcModel_noblend['amplr'],
+                'ampli_model':lcModel_noblend['ampli'],'amplz_model':lcModel_noblend['amplz'],'amply_model':lcModel_noblend['amply'],
+                'amplu':finalResult['ampl_u'],'amplg':finalResult['ampl_g'],'amplr':finalResult['ampl_r'],
+                'ampli':finalResult['ampl_i'],'amplz':finalResult['ampl_z'],'amply':finalResult['ampl_y'],
+                'meanu':finalResult['mean_u'],'meang':finalResult['mean_g'],'meanr':finalResult['mean_r'],
+                'meani':finalResult['mean_i'],'meanz':finalResult['mean_z'],'meany':finalResult['mean_y'],
+                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],
+                'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y'],
+                'fittingParametersAllband':finalResult['fittingParametersAllband'],
+                'data':data,'index_notsaturated':index_notsaturated,
+                'meanu_model':lcModel_noblend['meanu'],'meang_model':lcModel_noblend['meang'],'meanr_model':lcModel_noblend['meanr'],
+                'meani_model':lcModel_noblend['meani'],'meanz_model':lcModel_noblend['meanz'],'meany_model':lcModel_noblend['meany'],
+                'detlimLSSTu':LcTeoLSST['meandetlimLSSTu'],'detlimLSSTg':LcTeoLSST['meandetlimLSSTg'],'detlimLSSTr':LcTeoLSST['meandetlimLSSTr'],
+                'detlimLSSTi':LcTeoLSST['meandetlimLSSTi'],'detlimLSSTz':LcTeoLSST['meandetlimLSSTz'],'detlimLSSTy':LcTeoLSST['meandetlimLSSTy']}
         return output_metric
     
     
