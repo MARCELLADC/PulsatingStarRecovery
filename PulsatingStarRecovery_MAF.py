@@ -59,9 +59,10 @@ class PulsatingStarRecovery(maf.BaseMetric):
         
        
     """
-    def __init__(self,filename,dmod,sigmaFORnoise,do_remove_saturated,numberOfHarmonics,factorForDimensionGap,df,mjdCol='observationStartMJD',fiveSigmaDepth='fiveSigmaDepth',filters= 'filter', night='night',visitExposureTime='visitExposureTime',skyBrightness='skyBrightness', numExposures='numExposures', seeing='seeingFwhmEff',airmass='airmass',**kwargs):
-
-
+    def __init__(self,filename,dmod,sigmaFORnoise,do_remove_saturated,numberOfHarmonics,
+                 factorForDimensionGap,df,mjdCol='observationStartMJD',fiveSigmaDepth='fiveSigmaDepth',
+                 filters= 'filter', night='night',visitExposureTime='visitExposureTime',
+                 skyBrightness='skyBrightness', numExposures='numExposures', seeing='seeingFwhmEff',airmass='airmass',**kwargs):
 
        
         self.mjdCol = mjdCol
@@ -80,11 +81,10 @@ class PulsatingStarRecovery(maf.BaseMetric):
         self.numberOfHarmonics=numberOfHarmonics
         self.factorForDimensionGap=factorForDimensionGap
         self.df=df
-
         
         
-        
-        cols = [self.mjdCol,self.fiveSigmaDepth,self.filters,self.night,self.visitExposureTime,self.skyBrightness,self.numExposures,self.seeing,self.airmass] 
+        cols = [self.mjdCol,self.fiveSigmaDepth,self.filters,self.night,self.visitExposureTime,
+                self.skyBrightness,self.numExposures,self.seeing,self.airmass] 
         
         maps = ['DustMap']
         
@@ -98,12 +98,9 @@ class PulsatingStarRecovery(maf.BaseMetric):
         
     def run(self, dataSlice,slicePoint=None):
         
-
- 
         #the function 'ReadTeoSim' puts the pulsating star at distance=dmod+Ax/Av*3.1*slicePoint('ebv').Gives a dictionary
         ebv1=slicePoint['ebv']
-        
-        
+    
 
 #        if df.empty:
 #            lcModel_noblend=self.ReadTeoSim(self.lcModel_ascii,self.dmod,ebv1)
@@ -114,27 +111,19 @@ class PulsatingStarRecovery(maf.BaseMetric):
 #            
             
             
-  
         lcModel_noblend=self.ReadTeoSim(self.lcModel_ascii,self.dmod,ebv1)
         
        
-
-        
-       
-        
-        
-        
         #the class 'SaturationStacker' adds to dataSlice a column with the saturation
         satStacker = SaturationStacker()
         dataSlice = satStacker.run(dataSlice)
 
-    
-        
-        
+            
         #here we build -mv- that will be used in our metrics to build the simulated light curve:
         mv={'observationStartMJD':dataSlice[self.mjdCol],'fiveSigmaDepth':dataSlice[self.fiveSigmaDepth],
             'filter':dataSlice[self.filters], 'visitExposureTime':dataSlice[self.visitExposureTime],'night':dataSlice[self.night],
-            'numExposures':dataSlice[self.numExposures],'skyBrightness':dataSlice[self.skyBrightness], 'seeingFwhmEff':dataSlice[self.seeing], 'airmass':dataSlice[self.airmass],'saturation_mag':dataSlice['saturation_mag']}
+            'numExposures':dataSlice[self.numExposures],'skyBrightness':dataSlice[self.skyBrightness],
+            'seeingFwhmEff':dataSlice[self.seeing], 'airmass':dataSlice[self.airmass],'saturation_mag':dataSlice['saturation_mag']}
 
 
         #define time_lsst as array and filter
@@ -206,9 +195,12 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'uniformityKS_u':uni_meas['uniformityKS_u'],'uniformityKS_g':uni_meas['uniformityKS_g'],'uniformityKS_r':uni_meas['uniformityKS_r'],
                 'uniformityKS_i':uni_meas['uniformityKS_i'],'uniformityKS_z':uni_meas['uniformityKS_z'],'uniformityKS_y':uni_meas['uniformityKS_y'],
                 'P_gatpsy':best_per_temp,'Delta_Period':diffper,'Delta_Period_abs':diffper_abs,'Delta_Period_abs_cicli':diffcicli,
-                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
-                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
-                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y']}  
+                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,
+                'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
+                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,
+                'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
+                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],
+                'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y']}  
         else:
             lcModel_blend=self.ReadTeoSim_blend(self.df,self.lcModel_ascii,self.dmod,ebv1)
             
@@ -272,13 +264,18 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'uniformityKS_u':uni_meas['uniformityKS_u'],'uniformityKS_g':uni_meas['uniformityKS_g'],'uniformityKS_r':uni_meas['uniformityKS_r'],
                 'uniformityKS_i':uni_meas['uniformityKS_i'],'uniformityKS_z':uni_meas['uniformityKS_z'],'uniformityKS_y':uni_meas['uniformityKS_y'],
                 'P_gatpsy':best_per_temp,'Delta_Period':diffper,'Delta_Period_abs':diffper_abs,'Delta_Period_abs_cicli':diffcicli,
-                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
-                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
-                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y'],
+                'deltamag_u':deltamag_u,'deltamag_g':deltamag_g,'deltamag_r':deltamag_r,
+                'deltamag_i':deltamag_i,'deltamag_z':deltamag_z,'deltamag_y':deltamag_y,
+                'deltaamp_u':deltaamp_u, 'deltaamp_g':deltaamp_g,'deltaamp_r':deltaamp_r,
+                'deltaamp_i':deltaamp_i,'deltaamp_z':deltaamp_z,'deltaamp_y':deltaamp_y,
+                'chi_u':finalResult['chi_u'],'chi_g':finalResult['chi_g'],'chi_r':finalResult['chi_r'],
+                'chi_i':finalResult['chi_i'],'chi_z':finalResult['chi_z'],'chi_y':finalResult['chi_y'],
                 'P_gatpsy_blend':best_per_temp_blend,'Delta_Period_blend':diffper_blend,'Delta_Period_abs_blend':diffper_abs_blend,'Delta_Period_abs_cicli_blend':diffcicli_blend,
                 'deltamag_u_blend':deltamag_u_blend,'deltamag_g_blend':deltamag_g_blend,'deltamag_r_blend':deltamag_r_blend,'deltamag_i_blend':deltamag_i_blend,'deltamag_z_blend':deltamag_z_blend, 'deltamag_y_blend':deltamag_y_blend,
-                'deltaamp_u_blend':deltaamp_u_blend,'deltaamp_g_blend':deltaamp_g_blend,'deltaamp_r_blend':deltaamp_r_blend,'deltaamp_i_blend':deltaamp_i_blend,'deltaamp_z_blend':deltaamp_z_blend,'deltaamp_y_blend':deltaamp_y_blend,
-                'chi_u_blend':finalResult_blend['chi_u'],'chi_g_blend':finalResult_blend['chi_g'],'chi_r_blend':finalResult_blend['chi_r'],'chi_i_blend':finalResult_blend['chi_i'],'chi_z_blend':finalResult_blend['chi_z'],'chi_y_blend':finalResult_blend['chi_y'],
+                'deltaamp_u_blend':deltaamp_u_blend,'deltaamp_g_blend':deltaamp_g_blend,'deltaamp_r_blend':deltaamp_r_blend,
+                'deltaamp_i_blend':deltaamp_i_blend,'deltaamp_z_blend':deltaamp_z_blend,'deltaamp_y_blend':deltaamp_y_blend,
+                'chi_u_blend':finalResult_blend['chi_u'],'chi_g_blend':finalResult_blend['chi_g'],'chi_r_blend':finalResult_blend['chi_r'],
+                'chi_i_blend':finalResult_blend['chi_i'],'chi_z_blend':finalResult_blend['chi_z'],'chi_y_blend':finalResult_blend['chi_y'],
                           
                           }    
         return output_metric
@@ -370,8 +367,6 @@ class PulsatingStarRecovery(maf.BaseMetric):
     def get_chi_y_blend(self,metricValue):
         return metricValue['chi_y_blend']
     
-    
-
 
 
     def meanmag_antilog(self,mag):
@@ -387,6 +382,19 @@ class PulsatingStarRecovery(maf.BaseMetric):
         mag=np.asarray(mag)
         flux=10.**(-mag/2.5)
         return flux
+    
+    def ExtinctionRatios(self):
+        #From Padova Evolutionary tracks
+        au_over_aV=1.55607
+        ag_over_aV=1.18379
+        ar_over_aV=0.87075
+        ai_over_aV=0.67897
+        az_over_aV=0.51683
+        ay_over_aV=0.42839
+        aV_over_EBV=3.1
+        return (au_over_aV,ag_over_aV,ar_over_aV,ai_over_aV,az_over_aV,ay_over_aV,aV_over_EBV)
+    
+    
     def ReadAsciifile(self,filename):
         """
         Reads in an ascii file the light curve of the pulsating stars that we want simulate. Must be
@@ -470,18 +478,20 @@ class PulsatingStarRecovery(maf.BaseMetric):
 
         time_0=time_model[0]
 
+        ExtRatios=self.ExtinctionRatios()
+        
         for i in range(len(u_mod)):
-            u_model.append(u_mod[i]+dmod+1.55607*3.1*ebv)
+            u_model.append(u_mod[i]+dmod+ExtRatios[0]*ExtRatios[6]*ebv)
         for i in range(len(g_mod)):
-            g_model.append(g_mod[i]+dmod+1.18379*3.1*ebv)
+            g_model.append(g_mod[i]+dmod+ExtRatios[1]*ExtRatios[6]*ebv)
         for i in range(len(r_mod)):
-            r_model.append(r_mod[i]+dmod+0.87075*3.1*ebv)
+            r_model.append(r_mod[i]+dmod+ExtRatios[2]*ExtRatios[6]*ebv)
         for i in range(len(i_mod)):
-            i_model.append(i_mod[i]+dmod+0.67897*3.1*ebv)
+            i_model.append(i_mod[i]+dmod+ExtRatios[3]*ExtRatios[6]*ebv)
         for i in range(len(z_mod)):
-            z_model.append(z_mod[i]+dmod+0.51683*3.1*ebv)
+            z_model.append(z_mod[i]+dmod+ExtRatios[4]*ExtRatios[6]*ebv)
         for i in range(len(y_mod)):
-            y_model.append(y_mod[i]+dmod+0.42839*3.1*ebv)
+            y_model.append(y_mod[i]+dmod+ExtRatios[5]*ExtRatios[6]*ebv)
  
         
 #compute the intensity means
@@ -524,7 +534,8 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'u':u_model, 'g': g_model, 'r': r_model, 'i': i_model, 'z': z_model, 'y': y_model,
                 'meanu':meanu,'meang':meang,'meanr':meanr,'meani':meani,'meanz':meanz,'meany':meany,
                 'amplu':amplu,'amplg':amplg,'amplr':amplr,'ampli':ampli,'amplz':amplz,'amply':amply,
-                'mean_flux_u':mean_flux_u,'mean_flux_g':mean_flux_g,'mean_flux_r':mean_flux_r,'mean_flux_i':mean_flux_i,'mean_flux_z':mean_flux_z,'mean_flux_y':mean_flux_y,}
+                'mean_flux_u':mean_flux_u,'mean_flux_g':mean_flux_g,'mean_flux_r':mean_flux_r,
+                'mean_flux_i':mean_flux_i,'mean_flux_z':mean_flux_z,'mean_flux_y':mean_flux_y}
         return output
     
     def ReadTeoSim_blend(self,df,model,dmod,ebv):
@@ -549,12 +560,6 @@ class PulsatingStarRecovery(maf.BaseMetric):
         flux_blend_i=self.mag_antilog(df['imag'])
         flux_blend_z=self.mag_antilog(df['zmag'])
         flux_blend_y=self.mag_antilog(df['ymag'])
-        
-        
-
-       
-    
-    
     
         time_model_blend=model['time'].copy()
         u_mod_blend=model['u'].copy()
@@ -577,18 +582,20 @@ class PulsatingStarRecovery(maf.BaseMetric):
 
         time_0=time_model_blend[0]
 
+        ExtRatios=self.ExtinctionRatios()
+        
         for i in range(len(u_mod_blend)):
-            u_model_blend.append(u_mod_blend[i]+dmod+1.55607*3.1*ebv)
+            u_model_blend.append(u_mod_blend[i]+dmod+ExtRatios[0]*ExtRatios[6]*ebv)
         for i in range(len(g_mod_blend)):
-            g_model_blend.append(g_mod_blend[i]+dmod+1.18379*3.1*ebv)
+            g_model_blend.append(g_mod_blend[i]+dmod+ExtRatios[1]*ExtRatios[6]*ebv)
         for i in range(len(r_mod_blend)):
-            r_model_blend.append(r_mod_blend[i]+dmod+1.87075*3.1*ebv)
+            r_model_blend.append(r_mod_blend[i]+dmod+ExtRatios[2]*ExtRatios[6]*ebv)
         for i in range(len(i_mod_blend)):
-            i_model_blend.append(i_mod_blend[i]+dmod+0.67897*3.1*ebv)
+            i_model_blend.append(i_mod_blend[i]+dmod+ExtRatios[3]*ExtRatios[6]*ebv)
         for i in range(len(z_mod_blend)):
-            z_model_blend.append(z_mod_blend[i]+dmod+0.51683*3.1*ebv)
+            z_model_blend.append(z_mod_blend[i]+dmod+ExtRatios[4]*ExtRatios[6]*ebv)
         for i in range(len(y_mod_blend)):
-            y_model_blend.append(y_mod_blend[i]+dmod+0.42839*3.1*ebv)
+            y_model_blend.append(y_mod_blend[i]+dmod+ExtRatios[5]*ExtRatios[6]*ebv)
  
         
 #compute the intensity means
@@ -640,7 +647,8 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'u':u_model_blend, 'g': g_model_blend, 'r': r_model_blend, 'i': i_model_blend, 'z': z_model_blend, 'y': y_model_blend,
                 'meanu':meanu_blend,'meang':meang_blend,'meanr':meanr_blend,'meani':meani_blend,'meanz':meanz_blend,'meany':meany_blend,
                 'amplu':amplu_blend,'amplg':amplg_blend,'amplr':amplr_blend,'ampli':ampli_blend,'amplz':amplz_blend,'amply':amply_blend,
-                'mean_flux_u':mean_flux_u_blend,'mean_flux_g':mean_flux_g_blend,'mean_flux_r':mean_flux_r_blend,'mean_flux_i':mean_flux_i_blend,'mean_flux_z':mean_flux_z_blend,'mean_flux_y':mean_flux_y_blend,}
+                'mean_flux_u':mean_flux_u_blend,'mean_flux_g':mean_flux_g_blend,'mean_flux_r':mean_flux_r_blend,
+                'mean_flux_i':mean_flux_i_blend,'mean_flux_z':mean_flux_z_blend,'mean_flux_y':mean_flux_y_blend}
         return output
     
   
@@ -951,7 +959,8 @@ class PulsatingStarRecovery(maf.BaseMetric):
             saturation_index_z[i]=0
         for i in index_notsaturated['ind_notsaturated_y']:
             saturation_index_y[i]=0
-        saturation_index={'u':saturation_index_u,'g':saturation_index_g,'r':saturation_index_r,'i':saturation_index_i,'z':saturation_index_z,'y':saturation_index_y}
+        saturation_index={'u':saturation_index_u,'g':saturation_index_g,'r':saturation_index_r,
+                          'i':saturation_index_i,'z':saturation_index_z,'y':saturation_index_y}
 
         detection_index_u=[0]*len(LcTeoLSST['timeu'])
         detection_index_g=[0]*len(LcTeoLSST['timeg'])
@@ -980,7 +989,8 @@ class PulsatingStarRecovery(maf.BaseMetric):
             detection_index_z[i]=1
         for i in ind_detection_y:
             detection_index_y[i]=1
-        detection_index={'u':detection_index_u,'g':detection_index_g,'r':detection_index_r,'i':detection_index_i,'z':detection_index_z,'y':detection_index_y}
+        detection_index={'u':detection_index_u,'g':detection_index_g,'r':detection_index_r,
+                         'i':detection_index_i,'z':detection_index_z,'y':detection_index_y}
         return index_notsaturated,saturation_index,detection_index
     
   
@@ -1159,7 +1169,10 @@ class PulsatingStarRecovery(maf.BaseMetric):
        ########This is to measure the best period 
         fitLS_multi= periodic.LombScargleMultiband(fit_period=True)
         fitLS_multi.optimizer.period_range=(minper_opt, maxper_opt)
-        fitLS_multi.fit(LcTeoLSST_noised['time_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['mag_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['dmag_all'][index_notsaturated['ind_notsaturated_all']], mv['filter'][index_notsaturated['ind_notsaturated_all']])
+        fitLS_multi.fit(LcTeoLSST_noised['time_all'][index_notsaturated['ind_notsaturated_all']],
+                        LcTeoLSST_noised['mag_all'][index_notsaturated['ind_notsaturated_all']],
+                        LcTeoLSST_noised['dmag_all'][index_notsaturated['ind_notsaturated_all']], 
+                        mv['filter'][index_notsaturated['ind_notsaturated_all']])
         best_per_temp=fitLS_multi.best_period
 
 
@@ -1262,10 +1275,6 @@ class PulsatingStarRecovery(maf.BaseMetric):
         meanMag_i=self.meanmag_antilog(magModelFromFit_i)
         meanMag_z=self.meanmag_antilog(magModelFromFit_z)
         meanMag_y=self.meanmag_antilog(magModelFromFit_y)
-
-
-
-
 
 
 
