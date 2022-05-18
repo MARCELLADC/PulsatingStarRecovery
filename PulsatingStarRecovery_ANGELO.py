@@ -123,18 +123,11 @@ class PulsatingStarRecovery(maf.BaseMetric):
   
         lcModel_noblend=self.ReadTeoSim(self.lcModel_ascii,dmod,ebv1)
         
-       
 
-        
-       
-        
-        
         
         #the class 'SaturationStacker' adds to dataSlice a column with the saturation
         satStacker = SaturationStacker()
         dataSlice = satStacker.run(dataSlice)
-
-    
         
         
         #here we build -mv- that will be used in our metrics to build the simulated light curve:
@@ -332,13 +325,21 @@ class PulsatingStarRecovery(maf.BaseMetric):
                           }    
         return output_metric
     
-
+    
+    def ExtinctionRatios(self):
+        #From Padova Evolutionary tracks
+        au_over_aV=1.55607
+        ag_over_aV=1.18379
+        ar_over_aV=0.87075
+        ai_over_aV=0.67897
+        az_over_aV=0.51683
+        ay_over_aV=0.42839
+        aV_over_EBV=3.1
+        return (au_over_aV,ag_over_aV,ar_over_aV,ai_over_aV,az_over_aV,ay_over_aV,aV_over_EBV)
+    
+    
     def reduceP_gatpsy(self, metricValue):
         return metricValue['meany_model']  
-
-    
-
-
 
     def meanmag_antilog(self,mag):
         mag=np.asarray(mag)
@@ -430,24 +431,23 @@ class PulsatingStarRecovery(maf.BaseMetric):
         
         
         phase_model=model['phase'].copy()
-        
-        
         period_model=model['period']
-
         time_0=time_model[0]
 
+        ExtRatios=self.ExtinctionRatios()
+        
         for i in range(len(u_mod)):
-            u_model.append(u_mod[i]+dmod+1.55607*3.1*ebv)
+            u_model.append(u_mod[i]+dmod+ExtRatios[0]*ExtRatios[6]*ebv)
         for i in range(len(g_mod)):
-            g_model.append(g_mod[i]+dmod+1.18379*3.1*ebv)
+            g_model.append(g_mod[i]+dmod+ExtRatios[1]*ExtRatios[6]*ebv)
         for i in range(len(r_mod)):
-            r_model.append(r_mod[i]+dmod+1.87075*3.1*ebv)
+            r_model.append(r_mod[i]+dmod+ExtRatios[2]*ExtRatios[6]*ebv)
         for i in range(len(i_mod)):
-            i_model.append(i_mod[i]+dmod+0.67897*3.1*ebv)
+            i_model.append(i_mod[i]+dmod+ExtRatios[3]*ExtRatios[6]*ebv)
         for i in range(len(z_mod)):
-            z_model.append(z_mod[i]+dmod+0.51683*3.1*ebv)
+            z_model.append(z_mod[i]+dmod+ExtRatios[4]*ExtRatios[6]*ebv)
         for i in range(len(y_mod)):
-            y_model.append(y_mod[i]+dmod+0.42839*3.1*ebv)
+            y_model.append(y_mod[i]+dmod+ExtRatios[5]*ExtRatios[6]*ebv)
  
         
 #compute the intensity means
@@ -517,10 +517,6 @@ class PulsatingStarRecovery(maf.BaseMetric):
         flux_blend_y=self.mag_antilog(df['ymag'])
         
         
-
-       
-    
-    
     
         time_model_blend=model['time'].copy()
         u_mod_blend=model['u'].copy()
@@ -543,18 +539,20 @@ class PulsatingStarRecovery(maf.BaseMetric):
 
         time_0=time_model_blend[0]
 
+        ExtRatios=self.ExtinctionRatios()
+        
         for i in range(len(u_mod_blend)):
-            u_model_blend.append(u_mod_blend[i]+dmod+1.55607*3.1*ebv)
+            u_model_blend.append(u_mod_blend[i]+dmod+ExtRatios[0]*ExtRatios[6]*ebv)
         for i in range(len(g_mod_blend)):
-            g_model_blend.append(g_mod_blend[i]+dmod+1.18379*3.1*ebv)
+            g_model_blend.append(g_mod_blend[i]+dmod+ExtRatios[1]*ExtRatios[6]*ebv)
         for i in range(len(r_mod_blend)):
-            r_model_blend.append(r_mod_blend[i]+dmod+0.87075*3.1*ebv)
+            r_model_blend.append(r_mod_blend[i]+dmod+ExtRatios[2]*ExtRatios[6]*ebv)
         for i in range(len(i_mod_blend)):
-            i_model_blend.append(i_mod_blend[i]+dmod+0.67897*3.1*ebv)
+            i_model_blend.append(i_mod_blend[i]+dmod+ExtRatios[3]*ExtRatios[6]*ebv)
         for i in range(len(z_mod_blend)):
-            z_model_blend.append(z_mod_blend[i]+dmod+0.51683*3.1*ebv)
+            z_model_blend.append(z_mod_blend[i]+dmod+ExtRatios[4]*ExtRatios[6]*ebv)
         for i in range(len(y_mod_blend)):
-            y_model_blend.append(y_mod_blend[i]+dmod+0.42839*3.1*ebv)
+            y_model_blend.append(y_mod_blend[i]+dmod+ExtRatios[5]*ExtRatios[6]*ebv)
  
         
 #compute the intensity means
@@ -1161,14 +1159,9 @@ class PulsatingStarRecovery(maf.BaseMetric):
 
         diffper=best_per_temp-period_model
         diffper_abs=abs(best_per_temp-period_model)/period_model*100
-        diffcicli=abs(best_per_temp-period_model)/period_model*1/cicli
-
-#
- 
+        diffcicli=abs(best_per_temp-period_model)/period_model*1/cicli 
 
         return best_per_temp,diffper,diffper_abs,diffcicli 
-    
- 
  
 
     def LcFitting(self,data,index,period,numberOfHarmonics):
@@ -1550,8 +1543,9 @@ class PulsatingStarRecovery(maf.BaseMetric):
         ax8.plot(phase_sat_y,magLSST_sat_y,'o',color='magenta',mfc='magenta')
         
         
-        
         plt.savefig('plotting_SimulatedLC.pdf')
+        plt.close(fig)
+        
     def plotting_SimulatedLC_nonoise(self,phaseModelu,magModelu,phaseModelg,magModelg,
                   phaseModelr,magModelr,phaseModeli,magModeli,phaseModelz,magModelz,phaseModely,magModely,
                   phaseLSSTu,magLSSTu,phaseLSSTg,magLSSTg,phaseLSSTr,magLSSTr,
@@ -1719,7 +1713,7 @@ class PulsatingStarRecovery(maf.BaseMetric):
         
         
         plt.savefig('plotting_SimulatedLC_nonoise.pdf')
-        
+        plt.close(fig)
         
         
     def LcPeriod_withfigure(self,mv,LcTeoLSST,LcTeoLSST_noised,index_notsaturated):
@@ -1817,7 +1811,7 @@ class PulsatingStarRecovery(maf.BaseMetric):
         ax[2].set_xlabel('Period (days)')
         ax[2].set_ylabel('power')
         plt.savefig('plottingPeriodogram.pdf')
-        
+        plt.close(fig)
 
         
         return best_per_temp,diffper,diffper_abs,diffcicli
@@ -1908,6 +1902,8 @@ class PulsatingStarRecovery(maf.BaseMetric):
         ax6.set_xlabel('phase')
         
         plt.savefig('LcFittingCEF.pdf')
+        plt.close(fig)
+        
     def plotting(self,data,fittingParameters,period,zeroTimeRef):
         
         fig=plt.figure(figsize=(10,16), dpi=80)
@@ -1992,6 +1988,7 @@ class PulsatingStarRecovery(maf.BaseMetric):
         ax6.set_xlabel('phase')
         
         plt.savefig('LcFitting.pdf')
+        plt.close(fig)
         
         
     def outputforplotanal(self,mv,lcModel_noblend):
@@ -2032,11 +2029,3 @@ class PulsatingStarRecovery(maf.BaseMetric):
                 'detlimLSSTi':LcTeoLSST['meandetlimLSSTi'],'detlimLSSTz':LcTeoLSST['meandetlimLSSTz'],'detlimLSSTy':LcTeoLSST['meandetlimLSSTy']}
         return output_metric
     
-    
-    
-    
-
-    
-    
-    
-  
